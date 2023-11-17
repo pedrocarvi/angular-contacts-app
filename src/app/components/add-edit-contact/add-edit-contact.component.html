@@ -1,0 +1,55 @@
+<app-navbar></app-navbar>
+<div class="add-contact-container p-4">
+  <h2>{{ actionPage }} contacto</h2>
+  <p>Datos del contacto:</p>
+  <form [formGroup]="formAddContact" (ngSubmit)="addEditContact()">
+    <div class="mb-3">
+      <label for="name-input" class="form-label"> Nombre </label>
+      <input
+        formControlName="contactName"
+        type="text"
+        class="form-control"
+        id="name-input"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="cellphone-input" class="form-label">Numero Celular</label>
+      <input
+        formControlName="telephoneNumber"
+        type="string"
+        class="form-control"
+        id="cellphone-number"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="telephone-input" class="form-label">Numero Telefono</label>
+      <input
+        formControlName="cellphoneNumber"
+        type="string"
+        class="form-control"
+        id="telephone-number"
+      />
+    </div>
+    <button class="btn btn-primary mx-2" routerLink="/contacts-list">
+      Volver
+    </button>
+    <button
+      [disabled]="formAddContact.invalid"
+      type="submit"
+      class="btn btn-primary"
+    >
+      {{ actionPage }} contacto
+    </button>
+  </form>
+
+  <div class="text-center">
+    <div
+      *ngIf="loading"
+      class="spinner-border"
+      role="status"
+      style="width: 5rem; height: 5rem"
+    >
+      <span class="sr-only"></span>
+    </div>
+  </div>
+</div>
