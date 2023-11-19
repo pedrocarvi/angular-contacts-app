@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 export class AddEditContactComponent implements OnInit {
   formAddContact: FormGroup;
   id: number;
-  actionPage: string = 'Agregar';
+  actionPage: string = 'Add new';
   loading: boolean = false;
 
   constructor(
@@ -35,7 +35,7 @@ export class AddEditContactComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.id != 0) {
-      this.actionPage = 'Editar';
+      this.actionPage = 'Edit';
       this.obtenerContactoById(this.id);
     }
   }
@@ -56,11 +56,16 @@ export class AddEditContactComponent implements OnInit {
   }
 
   editContact(id: number, contact: Contacto) {
+    this.loading = true;
     this.ApiService.updateContact(id, contact).subscribe({
       next: () => {
+        this.loading = false;
+        this.toastr.success('Contacto editado', 'Éxito');
         this.router.navigate(['/contacts-list']);
       },
       error: (err) => {
+        this.loading = false;
+        this.toastr.error('No se pudo editar el contacto: ', err);
         console.log('Error: ', err);
       },
     });
@@ -68,30 +73,36 @@ export class AddEditContactComponent implements OnInit {
 
   addContact(contact: Contacto) {
     this.loading = true;
-    setTimeout(() => {
-      this.ApiService.addContact(contact).subscribe({
-        next: () => {
-          this.loading = false;
-          this.toastr.success('Contacto añadido.', 'Éxito');
-          this.router.navigate(['/contacts-list']);
-        },
-        error: (err) => {
-          setTimeout(() => {
-            this.toastr.error('No se pudo añadir el contacto: ', err);
-          }, 3000);
-        },
-      });
-    }, 2000);
+    this.ApiService.addContact(contact).subscribe({
+      next: () => {
+        this.loading = false;
+        this.toastr.success('Contacto añadido.', 'Éxito');
+        this.router.navigate(['/contacts-list']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.toastr.error('No se pudo añadir el contacto: ', err);
+        console.log('Error: ', err);
+      },
+    });
   }
 
   obtenerContactoById(id: number) {
-    this.ApiService.getContactById(id).subscribe((data) => {
-      this.formAddContact.patchValue({
-        contactName: data.name,
-        telephoneNumber: data.telephoneNumber,
-        cellphoneNumber: data.celularNumber,
-      });
-      console.log(data);
+    this.loading = true;
+    this.ApiService.getContactById(id).subscribe({
+      next: (data) => {
+        this.formAddContact.patchValue({
+          contactName: data.name,
+          telephoneNumber: data.telephoneNumber,
+          cellphoneNumber: data.celularNumber,
+        });
+        this.loading = false;
+      },
+      error: (err) => {
+        this.loading = false;
+        this.toastr.error('Error al traer los contactos');
+        console.log(err);
+      },
     });
   }
 }

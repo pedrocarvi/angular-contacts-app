@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Contacto } from 'src/app/interfaces/contacto';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -10,13 +11,15 @@ import { ApiService } from 'src/app/services/api.service';
 export class HomeComponent implements OnInit {
   contacts: Contacto[] = [];
   displayedContacts: Contacto[] = [];
+  loading: boolean = false;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.obtenerContacto();
   }
 
+  // Table pagination
   currentPage: number = 1;
   itemsPerPage: number = 5;
   totalItems: number = 0;
@@ -38,19 +41,47 @@ export class HomeComponent implements OnInit {
     this.displayedContacts = this.contacts.slice(startIndex, endIndex);
   }
 
+  // Obtener contactos para la tabla
   obtenerContacto() {
-    this.apiService.getContacts().subscribe((data) => {
-      this.contacts = data;
-      this.totalItems = this.contacts.length; // Actualizar el total de elementos
-      this.calculatePages(); // Calcular las páginas después de obtener los datos
-      this.changePage(1); // Asegurar que se muestren los primeros elementos al obtener los datos
-      console.log(this.contacts);
+    this.loading = true;
+    this.apiService.getContacts().subscribe({
+      next: (data) => {
+        this.contacts = data;
+        this.totalItems = this.contacts.length; // Actualizar el total de elementos
+        this.calculatePages(); // Calcular las páginas después de obtener los datos
+        this.changePage(1); // Asegurar que se muestren los primeros elementos al obtener los datos
+        this.loading = false;
+      },
+      error: (err) => {
+        this.loading = false;
+        this.toastr.error('No se pudieron traer los contactos', err);
+        console.log(err);
+      },
     });
   }
 
+  confirmarEliminacion(contact: Contacto) {
+    const confirmacion = window.confirm(
+      'Are you sure you want to delete this contact?'
+    );
+
+    if (confirmacion && contact.id !== undefined) {
+      this.eliminarContacto(contact.id);
+    }
+  }
+
   eliminarContacto(id: number) {
-    this.apiService.deleteContact(id).subscribe(() => {
-      this.obtenerContacto();
+    this.loading = true;
+    this.apiService.deleteContact(id).subscribe({
+      next: () => {
+        this.loading = false;
+        this.obtenerContacto();
+      },
+      error: (err) => {
+        this.loading = false;
+        this.toastr.error('No se pudo eliminar el contacto', err);
+        console.log(err);
+      },
     });
   }
 }

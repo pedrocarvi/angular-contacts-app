@@ -1,22 +1,32 @@
 <app-navbar></app-navbar>
-<div
-  class="contacts-list-title w-100 d-flex flex-column justify-content-center align-items-center py-4"
->
-  <h2>Lista de contactos</h2>
-  <button class="btn btn-primary mt-4" routerLink="/add-contact">
-    Agregar nuevo contacto
-  </button>
+
+<div class="row contacts-container d-flex align-items-center">
+  <div class="col-6 d-flex p-0">
+    <h4 class="text-light fw-bold">Contacts List</h4>
+    <span class="total-contacts-span"> {{ contacts.length }} Contacts </span>
+  </div>
+  <div class="col-6 p-0 d-flex justify-content-end">
+    <button class="add-contact-btn" routerLink="/add-contact">+ Add new</button>
+  </div>
+</div>
+
+<!-- Vacio -->
+<div class="container mt-5" *ngIf="contacts.length == 0">
+  <div class="jumbotron text-center">
+    <p class="lead fs-2 fw-bold">This section is empty!</p>
+    <p class="fw-normal">When you add contacts, they will appear here.</p>
+  </div>
 </div>
 <!-- Tabla -->
-<div class="table-container">
-  <table class="table table-striped border" id="table-id">
+<div class="table-container" *ngIf="contacts.length != 0">
+  <table id="table-id">
     <thead>
       <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Numero de telefono</th>
-        <th scope="col">Numero de celular</th>
-        <th scope="col">Acciones</th>
+        <th scope="col-1">Id</th>
+        <th scope="col-3">Name</th>
+        <th scope="col-3">Telephone number</th>
+        <th scope="col-3">Cellphone number</th>
+        <th scope="col-2">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -31,7 +41,11 @@
             style="cursor: pointer"
             routerLink="/contact-details/{{ contact.id }}"
           >
-            Ver
+            <img
+              src="../../../assets/show-icon-white.png"
+              alt="view"
+              width="24"
+            />
           </span>
           /
           <span
@@ -39,17 +53,25 @@
             style="cursor: pointer"
             routerLink="/edit-contact/{{ contact.id }}"
           >
-            Editar
+            <img
+              src="../../../assets/edit-icon-white.png"
+              alt="edit"
+              width="24"
+            />
           </span>
           /
           <span
             class="text-danger"
             style="cursor: pointer"
             (click)="
-              contact.id !== undefined ? eliminarContacto(contact.id) : null
+              contact.id !== undefined ? confirmarEliminacion(contact) : null
             "
           >
-            Eliminar
+            <img
+              src="../../../assets/trash-icon-white.png"
+              alt="delete"
+              width="24"
+            />
           </span>
         </td>
       </tr>
