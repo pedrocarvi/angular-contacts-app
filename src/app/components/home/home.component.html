@@ -22,22 +22,37 @@
   <table id="table-id">
     <thead>
       <tr>
+        <th scope="col-1">Fav</th>
         <th scope="col-1">Id</th>
         <th scope="col-3">Name</th>
         <th scope="col-3">Telephone number</th>
-        <th scope="col-3">Cellphone number</th>
+        <th scope="col-2">Cellphone number</th>
         <th scope="col-2">Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let contact of displayedContacts">
+        <td (click)="toggleFavorite(contact)">
+          <img
+            *ngIf="contact.favorite == false"
+            src="../../../assets/favorites-icon.svg"
+            alt="no-fav"
+            style="cursor: pointer"
+          />
+          <img
+            *ngIf="contact.favorite == true"
+            src="../../../assets/heart-fill.svg"
+            alt="fav"
+            style="cursor: pointer"
+          />
+        </td>
         <td>{{ contact.id }}</td>
         <td>{{ contact.name }}</td>
         <td>{{ contact.telephoneNumber }}</td>
         <td>{{ contact.celularNumber }}</td>
         <td>
           <span
-            class="text-success"
+            class="text-success me-3"
             style="cursor: pointer"
             routerLink="/contact-details/{{ contact.id }}"
           >
@@ -47,9 +62,8 @@
               width="24"
             />
           </span>
-          /
           <span
-            class="text-primary"
+            class="text-primary me-3"
             style="cursor: pointer"
             routerLink="/edit-contact/{{ contact.id }}"
           >
@@ -59,7 +73,6 @@
               width="24"
             />
           </span>
-          /
           <span
             class="text-danger"
             style="cursor: pointer"
@@ -82,7 +95,7 @@
     <ul class="pagination">
       <li class="page-item" *ngFor="let page of pages">
         <a
-          class="page-link"
+          class="page-link me-2"
           (click)="changePage(page)"
           style="cursor: pointer"
           >{{ page }}</a

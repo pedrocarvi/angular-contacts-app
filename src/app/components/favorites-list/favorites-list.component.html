@@ -1,0 +1,27 @@
+<app-navbar></app-navbar>
+<div class="favorites-list-container">
+  <h2 class="text-light mt-4 fw-bold" style="text-align: center">
+    Favorites List
+  </h2>
+  <!-- Vacio -->
+  <div class="container mt-5" *ngIf="contacts.length == 0">
+    <div class="jumbotron text-center">
+      <p class="lead fs-2 fw-bold">This section is empty!</p>
+      <p class="fw-normal">When you add contacts, they will appear here.</p>
+    </div>
+  </div>
+  <!-- Contactos -->
+  <div class="fav-contacts-container">
+    <div class="fav-contacts-card" *ngFor="let contact of contacts">
+      <h4 class="fav-contacts-card-title">
+        {{ contact.name }} - Id: {{ contact.id }}
+      </h4>
+      <p class="fav-contacts-card-tel">
+        Telephone: {{ contact.telephoneNumber }}
+      </p>
+      <p class="fav-contacts-card-cel">
+        Cellphone: {{ contact.celularNumber }}
+      </p>
+    </div>
+  </div>
+</div>

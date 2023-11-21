@@ -11,3 +11,13 @@
   border: 2px solid rgba(255, 255, 255, 0.6);
   color: rgba(255, 255, 255, 1);
 }
+
+.favorites-link-container {
+  cursor: pointer;
+  gap: 5px;
+}
+
+.favorites-text {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+}

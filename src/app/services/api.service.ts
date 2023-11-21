@@ -17,7 +17,7 @@ export class ApiService {
       'Content-Type': 'application/json',
       Authorization:
         'Bearer ' +
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZ2l2ZW5fbmFtZSI6Ikx1aXMgR29uemFsZXoiLCJmYW1pbHlfbmFtZSI6IkdvbnphbGVzIiwicm9sZSI6IlVzZXIiLCJuYmYiOjE3MDA0MjUyMTcsImV4cCI6MTcwMDQyODgxNywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTI4NTIiLCJhdWQiOiJhZ2VuZGFhcGkifQ.aroI68KGyKJMehISb8bewoKMBEjVwD1SFB7z1aO8gzA',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZ2l2ZW5fbmFtZSI6Ikx1aXMgR29uemFsZXoiLCJmYW1pbHlfbmFtZSI6IkdvbnphbGVzIiwicm9sZSI6IlVzZXIiLCJuYmYiOjE3MDA1Nzk3NTYsImV4cCI6MTcwMDU4MzM1NiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTI4NTIiLCJhdWQiOiJhZ2VuZGFhcGkifQ.X1KBTC2OHDu-u_AVMGBS3XXG5TKTlU1ZwKY1aOcey0c',
     });
   }
 
@@ -36,6 +36,13 @@ export class ApiService {
   getContactById(id: number): Observable<Contacto> {
     return this.http.get<Contacto>(
       `${this.appUrl}${this.apiUrl}/${id}`,
+      this.getCommonHeaders()
+    );
+  }
+
+  getFavoriteContacts(): Observable<Contacto[]> {
+    return this.http.get<Contacto[]>(
+      `${this.appUrl}${this.apiUrl}/favs`,
       this.getCommonHeaders()
     );
   }

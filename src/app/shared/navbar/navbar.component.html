@@ -3,6 +3,15 @@
     <a class="navbar-brand p-0 fw-bold text-light fs-4" routerLink="/"
       >AgendApp</a
     >
-    <button class="logout-btn" routerLink="/login">Logout</button>
+    <div class="d-flex align-items-center justify-content-center">
+      <div
+        routerLink="/favorites"
+        class="favorites-link-container d-flex align-items-center me-4"
+      >
+        <img src="../../../assets/favorites-icon.svg" alt="favorites" />
+        <span class="favorites-text p-0 m-0">Favorites</span>
+      </div>
+      <button class="logout-btn" routerLink="/login">Logout</button>
+    </div>
   </div>
 </nav>

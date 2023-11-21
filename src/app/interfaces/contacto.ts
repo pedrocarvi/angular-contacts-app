@@ -5,4 +5,5 @@ export interface Contacto {
   celularNumber: string;
   nombre_usuario?: string;
   password?: string;
+  favorite: boolean;
 }

@@ -28,6 +28,7 @@ export class AddEditContactComponent implements OnInit {
       contactName: ['', Validators.required],
       telephoneNumber: ['', Validators.required],
       cellphoneNumber: ['', Validators.required],
+      favoriteCondition: [false],
     });
     this.id = Number(this.aRoute.snapshot.paramMap.get('id'));
     console.log(this.id);
@@ -46,6 +47,7 @@ export class AddEditContactComponent implements OnInit {
       name: this.formAddContact.value.contactName,
       telephoneNumber: this.formAddContact.value.telephoneNumber,
       celularNumber: this.formAddContact.value.cellphoneNumber,
+      favorite: this.formAddContact.value.favoriteCondition,
     };
     if (this.id != 0) {
       contact.id = this.id;

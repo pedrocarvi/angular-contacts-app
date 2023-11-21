@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Contacto } from 'src/app/interfaces/contacto';
 import { ApiService } from 'src/app/services/api.service';
@@ -13,7 +14,11 @@ export class HomeComponent implements OnInit {
   displayedContacts: Contacto[] = [];
   loading: boolean = false;
 
-  constructor(private apiService: ApiService, private toastr: ToastrService) {}
+  constructor(
+    private apiService: ApiService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.obtenerContacto();
@@ -81,6 +86,32 @@ export class HomeComponent implements OnInit {
         this.loading = false;
         this.toastr.error('No se pudo eliminar el contacto', err);
         console.log(err);
+      },
+    });
+  }
+
+  toggleFavorite(contact: Contacto): void {
+    contact.favorite = !contact.favorite; // Invierte el valor de favorito
+    if (contact.id !== undefined) {
+      this.updateContact(contact.id, contact); // Llama a tu método existente de actualización
+    } else {
+      console.error('El contacto no tiene un ID definido.');
+      // Puedes manejar el caso en el que contact.id sea undefined según tus necesidades.
+    }
+  }
+
+  updateContact(id: number, contact: Contacto): void {
+    this.loading = true;
+    this.apiService.updateContact(id, contact).subscribe({
+      next: () => {
+        this.loading = false;
+        this.toastr.success('Contacto añadido a favorito', 'Éxito');
+        this.router.navigate(['/contacts-list']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.toastr.error('No se pudo añadir a favoritos: ', err);
+        console.log('Error: ', err);
       },
     });
   }

@@ -14,6 +14,7 @@ import { ContactDetailsComponent } from './components/contact-details/contact-de
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FavoritesListComponent } from './components/favorites-list/favorites-list.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FooterComponent,
     AddEditContactComponent,
     ContactDetailsComponent,
+    FavoritesListComponent,
   ],
   imports: [
     BrowserModule,
