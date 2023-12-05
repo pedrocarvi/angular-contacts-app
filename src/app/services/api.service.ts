@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Contacto } from '../interfaces/contacto';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class ApiService {
       'Content-Type': 'application/json',
       Authorization:
         'Bearer ' +
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZ2l2ZW5fbmFtZSI6Ikx1aXMgR29uemFsZXoiLCJmYW1pbHlfbmFtZSI6IkdvbnphbGVzIiwicm9sZSI6IlVzZXIiLCJuYmYiOjE3MDA1Nzk3NTYsImV4cCI6MTcwMDU4MzM1NiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTI4NTIiLCJhdWQiOiJhZ2VuZGFhcGkifQ.X1KBTC2OHDu-u_AVMGBS3XXG5TKTlU1ZwKY1aOcey0c',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZ2l2ZW5fbmFtZSI6Ikx1aXMgR29uemFsZXoiLCJmYW1pbHlfbmFtZSI6IkdvbnphbGVzIiwicm9sZSI6IlVzZXIiLCJuYmYiOjE3MDE3MjY3MTYsImV4cCI6MTcwMTczMDMxNiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTI4NTIiLCJhdWQiOiJhZ2VuZGFhcGkifQ.z8lqSlwgMYMNKriWD-b3niau4ttLQmHtRFJpxqkU_2Q',
     });
   }
 
@@ -68,5 +69,20 @@ export class ApiService {
       contact,
       this.getCommonHeaders()
     );
+  }
+
+  addUser(user: User): Observable<User> {
+    return this.http
+      .post<User>(
+        `https://localhost:7027/api/User`,
+        user,
+        this.getCommonHeaders()
+      )
+      .pipe(
+        catchError((error: any) => {
+          console.error('Error en la solicitud:', error);
+          throw error;
+        })
+      );
   }
 }

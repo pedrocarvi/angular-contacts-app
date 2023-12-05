@@ -6,46 +6,55 @@
       it.
     </p>
   </div>
-  <form class="form">
-    <div class="input-cnt">
-      <div class="flex-column">
-        <label>Username </label>
-      </div>
-      <div class="inputForm">
-        <input
-          type="text"
-          class="input"
-          placeholder="Enter your username"
-          autocomplete="off"
-        />
-      </div>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" formControlName="name" class="inputForm" />
     </div>
-    <div class="input-cnt">
-      <div class="flex-column">
-        <label>Email </label>
-      </div>
-      <div class="inputForm">
-        <input
-          type="text"
-          class="input"
-          placeholder="Enter your email"
-          autocomplete="off"
-        />
-      </div>
+
+    <div>
+      <label for="lastName">Apellido:</label>
+      <input
+        type="text"
+        id="lastName"
+        formControlName="lastName"
+        class="inputForm"
+      />
     </div>
-    <div class="input-cnt">
-      <div class="flex-column">
-        <label>Password </label>
-      </div>
-      <div class="inputForm">
-        <input
-          type="password"
-          class="input"
-          placeholder="Enter your password"
-        />
-      </div>
+
+    <div>
+      <label for="userName">Nombre de usuario:</label>
+      <input
+        type="text"
+        id="userName"
+        formControlName="userName"
+        class="inputForm"
+      />
     </div>
-    <button routerLink="/" class="button-submit">Sign up</button>
+
+    <div>
+      <label for="email">Correo electrónico:</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="inputForm"
+      />
+    </div>
+
+    <div>
+      <label for="password">Contraseña:</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="inputForm"
+      />
+    </div>
+
+    <button type="submit" [disabled]="!userForm.valid" class="button-submit">
+      Sign up
+    </button>
     <p class="p">
       Already have an account?
       <span class="span" routerLink="/login"> Login </span>

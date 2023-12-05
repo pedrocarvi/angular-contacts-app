@@ -44,49 +44,44 @@ span:hover {
   width: 400px;
 }
 
-.form {
+form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 20px;
   padding: 10px 30px;
   width: 450px;
 }
 
-.form button {
+form button {
   align-self: flex-end;
-}
-
-.flex-column > label {
-  color: #fff;
-  font-weight: 600;
 }
 
 .inputForm {
   border: 1.5px solid rgba(255, 255, 255, 0.3);
+  background-color: #101010;
+  color: rgba(255, 255, 255, 0.9);
   border-radius: 5px;
   height: 50px;
   display: flex;
   align-items: center;
   padding-left: 10px;
   transition: 0.2s ease-in-out;
+  width: 100%;
 }
 
-.input {
-  margin-left: 10px;
-  border-radius: 10px;
-  border: none;
-  width: 85%;
-  height: 100%;
-  background-color: #101010 !important;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.input:focus {
-  outline: none;
+.inputForm:focus,
+.inputForm:active {
+  outline: none !important;
 }
 
 .inputForm:focus-within {
   border: 1.5px solid rgba(255, 255, 255, 0.6);
+  background-color: #101010;
+}
+
+label {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
 }
 
 .button-submit {
