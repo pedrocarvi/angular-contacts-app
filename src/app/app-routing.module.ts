@@ -7,8 +7,10 @@ import { AddEditContactComponent } from './components/add-edit-contact/add-edit-
 import { ContactDetailsComponent } from './components/contact-details/contact-details.component';
 import { FavoritesListComponent } from './components/favorites-list/favorites-list.component';
 
+// Archivo clave del ruteo. En las routes se indican las urls y se le indican un componente para cada url
+
 const routes: Routes = [
-  { path: '', redirectTo: 'contacts-list', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'contacts-list', component: HomeComponent },
   { path: 'favorites', component: FavoritesListComponent },
   { path: 'login', component: LoginComponent },
@@ -16,7 +18,7 @@ const routes: Routes = [
   { path: 'add-contact', component: AddEditContactComponent },
   { path: 'edit-contact/:id', component: AddEditContactComponent },
   { path: 'contact-details/:id', component: ContactDetailsComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];
 
 @NgModule({

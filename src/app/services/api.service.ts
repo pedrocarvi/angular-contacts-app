@@ -1,9 +1,15 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Contacto } from '../interfaces/contacto';
 import { User } from '../interfaces/user';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,78 +17,93 @@ import { User } from '../interfaces/user';
 export class ApiService {
   private appUrl: string = environment.endpoint;
   private apiUrl: string = 'api/Contact';
-  private headers: HttpHeaders;
 
-  constructor(private http: HttpClient) {
-    this.headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization:
-        'Bearer ' +
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZ2l2ZW5fbmFtZSI6Ikx1aXMgR29uemFsZXoiLCJmYW1pbHlfbmFtZSI6IkdvbnphbGVzIiwicm9sZSI6IlVzZXIiLCJuYmYiOjE3MDE3MjY3MTYsImV4cCI6MTcwMTczMDMxNiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTI4NTIiLCJhdWQiOiJhZ2VuZGFhcGkifQ.z8lqSlwgMYMNKriWD-b3niau4ttLQmHtRFJpxqkU_2Q',
-    });
-  }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getCommonHeaders(): { headers: HttpHeaders } {
-    return { headers: this.headers };
+    const token = this.authService.getToken();
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }),
+    };
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('Error en la solicitud:', error);
+    return throwError(
+      'Hubo un error en la solicitud. Por favor, inténtalo de nuevo.'
+    );
   }
 
   // Endpoints
   getContacts(): Observable<Contacto[]> {
-    return this.http.get<Contacto[]>(
-      `${this.appUrl}${this.apiUrl}`,
-      this.getCommonHeaders()
-    );
+    return this.http
+      .get<Contacto[]>(`${this.appUrl}${this.apiUrl}`, this.getCommonHeaders())
+      .pipe(catchError(this.handleError));
   }
 
   getContactById(id: number): Observable<Contacto> {
-    return this.http.get<Contacto>(
-      `${this.appUrl}${this.apiUrl}/${id}`,
-      this.getCommonHeaders()
-    );
+    return this.http
+      .get<Contacto>(
+        `${this.appUrl}${this.apiUrl}/${id}`,
+        this.getCommonHeaders()
+      )
+      .pipe(catchError(this.handleError));
   }
 
   getFavoriteContacts(): Observable<Contacto[]> {
-    return this.http.get<Contacto[]>(
-      `${this.appUrl}${this.apiUrl}/favs`,
-      this.getCommonHeaders()
-    );
+    return this.http
+      .get<Contacto[]>(
+        `${this.appUrl}${this.apiUrl}/favs`,
+        this.getCommonHeaders()
+      )
+      .pipe(catchError(this.handleError));
   }
 
   deleteContact(id: number): Observable<void> {
-    return this.http.delete<void>(
-      `${this.appUrl}${this.apiUrl}?id=${id}`,
-      this.getCommonHeaders()
-    );
+    return this.http
+      .delete<void>(
+        `${this.appUrl}${this.apiUrl}?id=${id}`,
+        this.getCommonHeaders()
+      )
+      .pipe(catchError(this.handleError));
   }
 
   addContact(contact: Contacto): Observable<Contacto> {
-    return this.http.post<Contacto>(
-      `${this.appUrl}${this.apiUrl}`,
-      contact,
-      this.getCommonHeaders()
-    );
+    return this.http
+      .post<Contacto>(
+        `${this.appUrl}${this.apiUrl}`,
+        contact,
+        this.getCommonHeaders()
+      )
+      .pipe(catchError(this.handleError));
   }
 
   updateContact(id: number, contact: Contacto): Observable<void> {
-    return this.http.put<void>(
-      `${this.appUrl}${this.apiUrl}?id=${id}`,
-      contact,
-      this.getCommonHeaders()
-    );
+    return this.http
+      .put<void>(
+        `${this.appUrl}${this.apiUrl}?id=${id}`,
+        contact,
+        this.getCommonHeaders()
+      )
+      .pipe(catchError(this.handleError));
   }
 
   addUser(user: User): Observable<User> {
     return this.http
-      .post<User>(
-        `https://localhost:7027/api/User`,
+      .post<User>(`https://localhost:7027/api/User`, user)
+      .pipe(catchError(this.handleError));
+  }
+
+  loginUser(user: User): Observable<string> {
+    return this.http
+      .post<string>(
+        'https://localhost:7027/api/authentication/authenticate',
         user,
-        this.getCommonHeaders()
+        { responseType: 'text' as 'json' }
       )
-      .pipe(
-        catchError((error: any) => {
-          console.error('Error en la solicitud:', error);
-          throw error;
-        })
-      );
+      .pipe(catchError(this.handleError));
   }
 }

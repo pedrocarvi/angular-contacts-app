@@ -4,14 +4,21 @@ import { ToastrService } from 'ngx-toastr';
 import { Contacto } from 'src/app/interfaces/contacto';
 import { ApiService } from 'src/app/services/api.service';
 
+// Todos los componentes se conforman de un: html, css, js/ts
+// Html: esqueleto y estructura del contenido
+// Css: estilos, diseños del contenido
+// Js/Ts: funciones o acciones dinámicas del componente. Endpoints, loaders, toastr, etc.
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  // guardo la data de getAllContacts en la variable de arreglo contacts. Para iterarlos despues en el html.
   contacts: Contacto[] = [];
+  // variable c los contactos p mostrar según el pagination.
   displayedContacts: Contacto[] = [];
+  // booleano p indicar la condicion de los loaders
   loading: boolean = false;
 
   constructor(
@@ -20,11 +27,12 @@ export class HomeComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Indica qué hacer al componente ni bien se activa
   ngOnInit(): void {
     this.obtenerContacto();
   }
 
-  // Table pagination
+  // Variables y funciones p el pagination
   currentPage: number = 1;
   itemsPerPage: number = 5;
   totalItems: number = 0;
@@ -40,7 +48,6 @@ export class HomeComponent implements OnInit {
 
   changePage(page: number): void {
     this.currentPage = page;
-    // Definir el rango de elementos a mostrar en base a la página seleccionada
     const startIndex = (page - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.displayedContacts = this.contacts.slice(startIndex, endIndex);
@@ -49,12 +56,16 @@ export class HomeComponent implements OnInit {
   // Obtener contactos para la tabla
   obtenerContacto() {
     this.loading = true;
+    // En el apiService está la llamada al ep y me retorna la respuesta de ese ep.
     this.apiService.getContacts().subscribe({
       next: (data) => {
+        // guardo la data de allContacts en contacts
         this.contacts = data;
+        // Pagination
         this.totalItems = this.contacts.length; // Actualizar el total de elementos
         this.calculatePages(); // Calcular las páginas después de obtener los datos
         this.changePage(1); // Asegurar que se muestren los primeros elementos al obtener los datos
+        // Condición loading false cuando termina
         this.loading = false;
       },
       error: (err) => {
@@ -93,10 +104,9 @@ export class HomeComponent implements OnInit {
   toggleFavorite(contact: Contacto): void {
     contact.favorite = !contact.favorite; // Invierte el valor de favorito
     if (contact.id !== undefined) {
-      this.updateContact(contact.id, contact); // Llama a tu método existente de actualización
+      this.updateContact(contact.id, contact);
     } else {
       console.error('El contacto no tiene un ID definido.');
-      // Puedes manejar el caso en el que contact.id sea undefined según tus necesidades.
     }
   }
 
